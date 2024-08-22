@@ -1,0 +1,25 @@
+<?php
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserVerificationController;
+use App\Http\Controllers\Auth\UserLoginController;
+
+// routes/user.php
+// Route::get('email/verify', [UserVerificationController::class, 'show'])->name('verification.notice');
+// Route::get('email/verify/{id}/{hash}', [UserVerificationController::class, 'verify'])->name('verification.verify');
+// Route::post('email/resend', [UserVerificationController::class, 'resend'])->name('verification.resend');
+
+// User Login Routes
+
+// User Login Routes
+
+// Email Verification Routes
+
+// User Dashboard Route (for verified users)
+// Route::get('/dashboard', function () {
+//     return view('user.dashboard');
+// })->middleware(['auth', 'verified'])->name('user.dashboard');
+
+
+Route::get('/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+Route::get('/search-properties', [UserController::class, 'searchProperties'])->name('user.search-properties');

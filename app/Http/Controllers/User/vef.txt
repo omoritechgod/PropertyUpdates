@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Http\Controllers\User;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class UserVerificationController extends Controller
+{
+    /**
+     * Shows the email verification notice.
+     */
+    public function show(Request $request)
+    {
+        // Ensure the user is authenticated before checking for email verification
+        $user = Auth::user();
+
+        if (!$user) {
+            // Redirect to login if the user is not authenticated
+            return redirect()->route('login');
+        }
+
+        // Check if the user's email is already verified
+        return $user->hasVerifiedEmail()
+            ? redirect()->route('user.dashboard')
+            : view('auth.verify'); // Adjust the view path as necessary
+    }
+
+    /**
+     * Marks the authenticated user's email address as verified.
+     */
+    public function verify(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+
+        return redirect()->route('user.dashboard');
+    }
+
+    /**
+     * Resends the email verification notification.
+     */
+    public function resend(Request $request)
+    {
+        // Ensure the user is authenticated before checking for email verification
+        $user = Auth::user();
+
+        if (!$user) {
+            // Redirect to login if the user is not authenticated
+            return redirect()->route('login');
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('user.dashboard');
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return back()->with('status', 'verification-link-sent');
+    }
+    
+}
